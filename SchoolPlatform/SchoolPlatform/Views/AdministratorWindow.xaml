@@ -1,0 +1,503 @@
+﻿<Window x:Class="SchoolPlatform.Views.AdministratorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SchoolPlatform.Views"
+        xmlns:ctx="clr-namespace:SchoolPlatform.ViewModels"
+        xmlns:converter="clr-namespace:SchoolPlatform.Converters"
+        mc:Ignorable="d"
+        Title="Administrator" Height="737" Width="1265"
+        Background="Bisque">
+    
+    <Window.DataContext>
+        <ctx:AdministratorVM x:Name="administratorVM"/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="350"/>
+            <RowDefinition Height="350"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
+
+        <Border BorderBrush="Chocolate" Grid.Row="0" Grid.Column="0" BorderThickness="2"/>
+        <Border BorderBrush="Chocolate" Grid.Row="0" Grid.Column="1" BorderThickness="2"/>
+        <Border BorderBrush="Chocolate" Grid.Row="0" Grid.Column="2" BorderThickness="2"/>
+        <Border BorderBrush="Chocolate" Grid.Row="0" Grid.Column="3" BorderThickness="2"/>
+        <Border BorderBrush="Chocolate" Grid.Row="0" Grid.Column="4" BorderThickness="2"/>
+        <Border BorderBrush="Chocolate" Grid.Row="1" Grid.Column="0" BorderThickness="2"/>
+        <Border BorderBrush="Chocolate" Grid.Row="1" Grid.Column="1" BorderThickness="2"/>
+        <Border BorderBrush="Chocolate" Grid.Row="1" Grid.Column="2" BorderThickness="2"/>
+        <Border BorderBrush="Chocolate" Grid.Row="1" Grid.Column="3" BorderThickness="2"/>
+        <Border BorderBrush="Chocolate" Grid.Row="1" Grid.Column="4" BorderThickness="2"/>
+
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <StackPanel.Resources>
+                <converter:UserConverter x:Key="userConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="Users" FontSize="20" Width="50" HorizontalAlignment="Center"/>
+                </Grid>
+                
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddUserCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource userConverter}">
+                            <Binding ElementName="txtUserName" Path="Text"/>
+                            <Binding ElementName="txtUsername" Path="Text"/>
+                            <Binding ElementName="txtPassword" Path="Text"/>
+                            <Binding ElementName="txtUserTypeId" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Modify" Margin="5" Width="70" Height="25" Command="{Binding ModifyUserCommand}"
+                    CommandParameter="{Binding ElementName=usersGrid, Path=SelectedItem}"/>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteUserCommand}"
+                    CommandParameter="{Binding ElementName=usersGrid, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="90" FontSize="15">Name:</Label>
+                <TextBox Name="txtUserName" FontSize="15" Width="150" Text ="{Binding ElementName=usersGrid, 
+                Path=SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="90" FontSize="15">Username:</Label>
+                <TextBox Name="txtUsername" FontSize="15" Width="150" Text ="{Binding ElementName=usersGrid, 
+                Path=SelectedItem.Username, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="90" FontSize="15">Password:</Label>
+                <TextBox Name="txtPassword" FontSize="15" Width="150" Text ="{Binding ElementName=usersGrid, 
+                Path=SelectedItem.Password, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="90" FontSize="15">User Type:</Label>
+                <TextBox Name="txtUserTypeId" FontSize="15" Width="150" Text ="{Binding ElementName=usersGrid, 
+                Path=SelectedItem.UserTypeId, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <!--<WrapPanel>
+                <Label Content="{Binding ErrorMessage}" FontSize="15" Foreground="Red" Height="30"/>
+            </WrapPanel>-->
+            <DataGrid Name="usersGrid"  Margin="0,15,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding UsersList}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding UserId}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Username" Binding="{Binding Username}"/>
+                    <DataGridTextColumn Header="User Type" Binding="{Binding UserTypeId}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--<Grid Margin="5">
+                <Button Content="Refresh" Width="100" Command="{Binding RefreshCommand}"/>
+            </Grid>-->
+        </StackPanel>
+
+        
+
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <StackPanel.Resources>
+                <converter:UserTypeConverter x:Key="userTypeConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="User Types" FontSize="20" Width="95" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddUserTypeCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource userTypeConverter}">
+                            <Binding ElementName="txtTypeName" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Modify" Margin="5" Width="70" Height="25" Command="{Binding ModifyUserTypeCommand}"
+                    CommandParameter="{Binding ElementName=userTypesGrid, Path=SelectedItem}"/>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteUserTypeCommand}"
+                    CommandParameter="{Binding ElementName=userTypesGrid, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,40,0,0">
+                <Label Width="90" FontSize="15">Name:</Label>
+                <TextBox Name="txtTypeName" FontSize="15" Width="150" Text ="{Binding ElementName=userTypesGrid, 
+                Path=SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <DataGrid Name="userTypesGrid"  Margin="0,85,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding UserTypesList}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding UserTypeId}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+        
+
+        <StackPanel Grid.Row="0" Grid.Column="2">
+            <StackPanel.Resources>
+                <converter:SpecializationConverter x:Key="specializationConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="Specializations" FontSize="20" Width="130" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddSpecializationCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource specializationConverter}">
+                            <Binding ElementName="txtSpecializationName" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Modify" Margin="5" Width="70" Height="25" Command="{Binding ModifiSpecializationCommand}"
+                    CommandParameter="{Binding ElementName=specializationsGrid, Path=SelectedItem}"/>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteSpecializationCommand}"
+                    CommandParameter="{Binding ElementName=specializationsGrid, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,40,0,0">
+                <Label Width="90" FontSize="15">Name:</Label>
+                <TextBox Name="txtSpecializationName" FontSize="15" Width="150" Text ="{Binding ElementName=specializationsGrid, 
+                Path=SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <DataGrid Name="specializationsGrid"  Margin="0,85,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding SpecializationsList}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding SpecializationId}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+
+        
+        <StackPanel Grid.Row="0" Grid.Column="3">
+            <StackPanel.Resources>
+                <converter:SubjectConverter x:Key="subjectConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="Subjects" FontSize="20" Width="75" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddSubjectCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource subjectConverter}">
+                            <Binding ElementName="txtSubjectName" Path="Text"/>
+                            <Binding ElementName="hasThesis" Path="IsChecked"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Modify" Margin="5" Width="70" Height="25" Command="{Binding ModifySubjectCommand}"
+                    CommandParameter="{Binding ElementName=subjectsGrid, Path=SelectedItem}"/>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteSubjectCommand}"
+                    CommandParameter="{Binding ElementName=subjectsGrid, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,40,0,0">
+                <Label Width="90" FontSize="15">Name:</Label>
+                <TextBox Name="txtSubjectName" FontSize="15" Width="150" Text ="{Binding ElementName=subjectsGrid, 
+                Path=SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <Grid Margin="0,5,0,0">
+                <Label Width="90" FontSize="15" HorizontalAlignment="Left">Thesis:</Label>
+                <CheckBox x:Name="hasThesis" IsChecked="{Binding ElementName=subjectsGrid, Path=SelectedItem.Thesis, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Margin="80,0,0,0" VerticalAlignment="Center" Height="15" Width="15">
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="2" ScaleY="2"/>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+            </Grid>
+            <DataGrid Name="subjectsGrid"  Margin="0,50,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding SubjectsList}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding SubjectId}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Thesis" Binding="{Binding Thesis}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+        
+
+        <StackPanel Grid.Row="0" Grid.Column="4">
+            <StackPanel.Resources>
+                <converter:ClassroomConverter x:Key="classroomConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="Classrooms" FontSize="20" Width="102" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddClassroomCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource classroomConverter}">
+                            <Binding ElementName="txtSpecializationId" Path="Text"/>
+                            <Binding ElementName="txtYear" Path="Text"/>
+                            <Binding ElementName="txtName" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Modify" Margin="5" Width="70" Height="25" Command="{Binding ModifyClassroomCommand}"
+                    CommandParameter="{Binding ElementName=classroomsGrid, Path=SelectedItem}"/>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteClassroomCommand}"
+                    CommandParameter="{Binding ElementName=classroomsGrid, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="100" FontSize="15">Specialization:</Label>
+                <TextBox Name="txtSpecializationId" FontSize="15" Width="140" Text ="{Binding ElementName=classroomsGrid, 
+                Path=SelectedItem.SpecializationId, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="100" FontSize="15">Year:</Label>
+                <TextBox Name="txtYear" FontSize="15" Width="140" Text ="{Binding ElementName=classroomsGrid, 
+                Path=SelectedItem.Year, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="100" FontSize="15">Name:</Label>
+                <TextBox Name="txtName" FontSize="15" Width="140" Text ="{Binding ElementName=classroomsGrid, 
+                Path=SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <DataGrid Name="classroomsGrid"  Margin="0,50,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding ClassrommsList}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding ClassroomId}"/>
+                    <DataGridTextColumn Header="Specialization ID" Binding="{Binding SpecializationId}"/>
+                    <DataGridTextColumn Header="Year" Binding="{Binding Year}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+        
+        
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <StackPanel.Resources>
+                <converter:LinkTablesConverter x:Key="linkTablesConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="Student-classroom links" FontSize="20" Width="211" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddStudentClassroomLinkCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource linkTablesConverter}">
+                            <Binding ElementName="txtStudentId1" Path="Text"/>
+                            <Binding ElementName="txtClassroomId1" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Modify" Margin="5" Width="70" Height="25" Command="{Binding ModifyStudentClassroomLinkCommand}"
+                    CommandParameter="{Binding ElementName=studentClassroomLinks, Path=SelectedItem}"/>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteStudentClassroomLinkCommand}"
+                    CommandParameter="{Binding ElementName=studentClassroomLinks, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,20,0,0">
+                <Label Width="100" FontSize="15">Student ID:</Label>
+                <TextBox Name="txtStudentId1" FontSize="15" Width="140" Text ="{Binding ElementName=studentClassroomLinks, 
+                Path=SelectedItem.ID1, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="100" FontSize="15">Classroom ID:</Label>
+                <TextBox Name="txtClassroomId1" FontSize="15" Width="140" Text ="{Binding ElementName=studentClassroomLinks, 
+                Path=SelectedItem.ID2, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <DataGrid Name="studentClassroomLinks"  Margin="0,55,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding StudentClassroomLinks}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Student ID" Binding="{Binding ID1}"/>
+                    <DataGridTextColumn Header="Classroom ID" Binding="{Binding ID2}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+
+
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <StackPanel.Resources>
+                <converter:LinkTablesConverter x:Key="linkTablesConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="Teacher-classroom links" FontSize="20" Width="210" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddTeacherClassroomLinkCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource linkTablesConverter}">
+                            <Binding ElementName="txtTeacherId1" Path="Text"/>
+                            <Binding ElementName="txtClassroomId2" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteTeacherClassroomLinkCommand}"
+                    CommandParameter="{Binding ElementName=teacherClassroomLinks, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,20,0,0">
+                <Label Width="100" FontSize="15">Teacher ID:</Label>
+                <TextBox Name="txtTeacherId1" FontSize="15" Width="140" Text ="{Binding ElementName=teacherClassroomLinks, 
+                Path=SelectedItem.ID1, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="100" FontSize="15">Classroom ID:</Label>
+                <TextBox Name="txtClassroomId2" FontSize="15" Width="140" Text ="{Binding ElementName=teacherClassroomLinks, 
+                Path=SelectedItem.ID2, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <DataGrid Name="teacherClassroomLinks"  Margin="0,55,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding TeacherClassroomLinks}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Teacher ID" Binding="{Binding ID1}"/>
+                    <DataGridTextColumn Header="Classroom ID" Binding="{Binding ID2}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+
+
+        <StackPanel Grid.Row="1" Grid.Column="2">
+            <StackPanel.Resources>
+                <converter:LinkTablesConverter x:Key="linkTablesConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="Subject-classroom links" FontSize="20" Width="210" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddSubjectClassroomLinkCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource linkTablesConverter}">
+                            <Binding ElementName="txtSubjectId1" Path="Text"/>
+                            <Binding ElementName="txtClassroomId3" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteSubjectClassroomLinkCommand}"
+                    CommandParameter="{Binding ElementName=subjectClassroomLinks, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,20,0,0">
+                <Label Width="100" FontSize="15">Subject ID:</Label>
+                <TextBox Name="txtSubjectId1" FontSize="15" Width="140" Text ="{Binding ElementName=subjectClassroomLinks, 
+                Path=SelectedItem.ID1, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="100" FontSize="15">Classroom ID:</Label>
+                <TextBox Name="txtClassroomId3" FontSize="15" Width="140" Text ="{Binding ElementName=subjectClassroomLinks, 
+                Path=SelectedItem.ID2, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <DataGrid Name="subjectClassroomLinks"  Margin="0,55,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding SubjectClassroomLinks}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Subject ID" Binding="{Binding ID1}"/>
+                    <DataGridTextColumn Header="Classroom ID" Binding="{Binding ID2}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+
+
+        <StackPanel Grid.Row="1" Grid.Column="3">
+            <StackPanel.Resources>
+                <converter:LinkTablesConverter x:Key="linkTablesConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="Subject-teacher links" FontSize="20" Width="185" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddSubjectTeacherLinkCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource linkTablesConverter}">
+                            <Binding ElementName="txtSubjectId2" Path="Text"/>
+                            <Binding ElementName="txtTeacherId2" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteSubjectTeacherLinkCommand}"
+                    CommandParameter="{Binding ElementName=subjectTeacherLinks, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,20,0,0">
+                <Label Width="100" FontSize="15">Subject ID:</Label>
+                <TextBox Name="txtSubjectId2" FontSize="15" Width="140" Text ="{Binding ElementName=subjectTeacherLinks, 
+                Path=SelectedItem.ID1, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="100" FontSize="15">Teacher ID:</Label>
+                <TextBox Name="txtTeacherId2" FontSize="15" Width="140" Text ="{Binding ElementName=subjectTeacherLinks, 
+                Path=SelectedItem.ID2, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <DataGrid Name="subjectTeacherLinks"  Margin="0,55,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding SubjectTeacherLinks}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Subject ID" Binding="{Binding ID1}"/>
+                    <DataGridTextColumn Header="Teacher ID" Binding="{Binding ID2}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+
+
+        <StackPanel Grid.Row="1" Grid.Column="4">
+            <StackPanel.Resources>
+                <converter:LinkTablesConverter x:Key="linkTablesConverter" />
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Grid Height="30" Width="250">
+                    <TextBlock Text="Class Master-classroom links" FontSize="19" Width="240" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Button Content="Add" Margin="10,5,5,5" Width="70" Height="25"
+                    Command="{Binding AddClassMasterClassroomLinkCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource linkTablesConverter}">
+                            <Binding ElementName="txtClassMasterId" Path="Text"/>
+                            <Binding ElementName="txtClassroomId4" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Modify" Margin="5" Width="70" Height="25" Command="{Binding ModifyClassMasterClassroomLinkCommand}"
+                    CommandParameter="{Binding ElementName=classMasterClassroomLinks, Path=SelectedItem}"/>
+                <Button Content="Delete" Margin="5" Width="70" Height="25" Command="{Binding DeleteClassMasterClassroomLinkCommand}"
+                    CommandParameter="{Binding ElementName=classMasterClassroomLinks, Path=SelectedItem}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,20,0,0">
+                <Label Width="115" FontSize="15">Class master ID:</Label>
+                <TextBox Name="txtClassMasterId" FontSize="15" Width="125" Text ="{Binding ElementName=classMasterClassroomLinks, 
+                Path=SelectedItem.ID1, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,0">
+                <Label Width="115" FontSize="15">Classroom ID:</Label>
+                <TextBox Name="txtClassroomId4" FontSize="15" Width="125" Text ="{Binding ElementName=classMasterClassroomLinks, 
+                Path=SelectedItem.ID2, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <DataGrid Name="classMasterClassroomLinks"  Margin="0,55,0,0" AutoGenerateColumns="False" Width="240" Height="110"
+                  ItemsSource="{Binding ClassMasterClassroomLinks}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Class master ID" Binding="{Binding ID1}"/>
+                    <DataGridTextColumn Header="Classroom ID" Binding="{Binding ID2}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Window>

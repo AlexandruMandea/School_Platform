@@ -1,0 +1,69 @@
+﻿<Window x:Class="SchoolPlatform.Views.StudentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SchoolPlatform.Views"
+        xmlns:ctx="clr-namespace:SchoolPlatform.ViewModels"
+        mc:Ignorable="d"
+        Title="Student" Height="450" Width="800"
+        Background="Bisque">
+
+    <Window.DataContext>
+        <ctx:StudentVM/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="110"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="30" Text="{Binding Student.Name}" Margin="5,5,0,0"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Marks:" Width="290" FontSize="23" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Absences:" Width="290" FontSize="23"/>
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Averages:" Width="290" FontSize="23" />
+
+        <ComboBox Name="Subjects" ItemsSource="{Binding SubjectsFromClassroom}" DisplayMemberPath="Name" Grid.Row="0" Height="40" FontSize="23" Width="200" VerticalAlignment="Bottom" SelectionChanged="Subjects_SelectionChanged" Grid.ColumnSpan="2"/>
+
+        <DataGrid Name="MarksGrid" Grid.Row="2" Width="290" Height="110" AutoGenerateColumns="False"
+                  ItemsSource="{Binding MarksForASubject, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Subject" Binding="{Binding SubjectName}"/>
+                <DataGridTextColumn Header="Mark" Binding="{Binding Value}"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
+                <DataGridTextColumn Header="Thesis" Binding="{Binding Thesis}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DataGrid Name="AbsencesGrid" Grid.Row="2" Grid.Column="1" Width="290" Height="110" AutoGenerateColumns="False"
+                  ItemsSource="{Binding AbsencesForASubject, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="55,0,55,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Subject" Binding="{Binding SubjectName}"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
+                <DataGridTextColumn Header="Can be excused" Binding="{Binding CanBeExcused}"/>
+                <DataGridTextColumn Header="Excused" Binding="{Binding Excused}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DataGrid Name="AveragsGrid" Grid.Row="4" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="290" Height="110" AutoGenerateColumns="False"
+                  ItemsSource="{Binding Averages, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="55,0,55,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Subject" Binding="{Binding SubjectName}"/>
+                <DataGridTextColumn Header="Value" Binding="{Binding Value}"/>
+                <DataGridTextColumn Header="Semester" Binding="{Binding Semester}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
